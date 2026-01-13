@@ -36,7 +36,7 @@ EXPOSE 443
 COPY --from=publish /app/publish .
 
 # Set environment variables
-ENV ASPNETCORE_URLS=http://+:80
+ENV ASPNETCORE_URLS=http://+:8080
 ENV ASPNETCORE_ENVIRONMENT=Production
 
 ENTRYPOINT ["dotnet", "BulkyWebV01.dll"]
