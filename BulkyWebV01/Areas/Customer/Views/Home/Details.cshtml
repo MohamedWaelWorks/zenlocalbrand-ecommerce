@@ -1,0 +1,164 @@
+﻿
+@model ShoppingCart
+ 
+<form method="post" class="zen-product-detail zen-animate-fade">
+    <input hidden asp-for="ProductId" />
+
+    <div class="zen-breadcrumb">
+        <a asp-action="Index" class="zen-breadcrumb__link"><i class="bi bi-arrow-left"></i> Back to catalog</a>
+    </div>
+
+    <div class="zen-product-detail__container">
+        <div class="zen-product-detail__gallery">
+        <div class="card-body">
+            <div class="py-3">
+                <div class="row">
+                    <div class="col-6 col-md-2 offset-lg-1 pb-1">
+                        <a asp-action="Index" class="btn btn-outline-primary bg-gradient mb-5 fw-semibold btn-sm text-uppercase">
+                            <small>Back to home</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+            @if (Model.Product.ProductImages != null && Model.Product.ProductImages.Count > 0)
+            {
+                <div class="zen-gallery">
+                    <div class="zen-gallery__main">
+                        <img src="@Model.Product.ProductImages.FirstOrDefault().ImageUrl" 
+                             id="zenMainImage" 
+                             class="zen-gallery__main-img" 
+                             alt="@Model.Product.Title" 
+                             loading="eager" />
+                    </div>
+                    @if (Model.Product.ProductImages.Count > 1)
+                    {
+                        <div class="zen-gallery__thumbs">
+                            @foreach (var img in Model.Product.ProductImages)
+                            {
+                                <button type="button" class="zen-gallery__thumb" onclick="zenSwitchImage('@img.ImageUrl')">
+                                    <img src="@img.ImageUrl" 
+                                         alt="@Model.Product.Title thumbnail" 
+                                         loading="lazy" />
+                                </button>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="zen-gallery">
+                    <div class="zen-gallery__main">
+                        <img src="https://placehold.co/600x800/1a1f2e/6ee3ff?text=ZEN+Product" 
+                             class="zen-gallery__main-img" 
+                             alt="@Model.Product.Title placeholder" 
+                             loading="eager" />
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="zen-product-detail__info">
+
+            <div class="zen-product-header">
+                <span class="zen-chip">@Model.Product.Category.Name</span>
+                <h1 class="zen-product-title">@Model.Product.Title</h1>
+                <p class="zen-product-author">By <strong>@Model.Product.Author</strong></p>
+                <p class="zen-product-meta">ISBN: @Model.Product.ISBN</p>
+                
+                @if (!string.IsNullOrEmpty(Model.Product.AvailableSizes))
+                {
+                    <div class="mt-3">
+                        <p class="mb-2"><strong>Available Sizes:</strong></p>
+                        <div class="d-flex gap-2">
+                            @foreach (var size in Model.Product.AvailableSizes.Split(','))
+                            {
+                                <span class="badge bg-primary" style="font-size: 0.9rem; padding: 0.5rem 1rem;">@size</span>
+                            }
+                        </div>
+                    </div>
+                }
+
+                @if (Model.Product.IsOutOfStock)
+                {
+                    <div class="alert alert-danger mt-3" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        <strong>OUT OF STOCK</strong> - This product is currently unavailable
+                    </div>
+                }
+            </div>
+
+            <div class="zen-product-pricing">
+                @if (!Model.Product.IsOutOfStock)
+                {
+                    <div class="zen-pricing-header">
+                        <span class="zen-price-label">Price</span>
+                        <span class="zen-price-old">@Model.Product.ListPrice.ToString("N2") EGP</span>
+                    </div>
+                    <div class="zen-pricing-tiers">
+                        @if (Model.Product.SalePrice.HasValue && Model.Product.SalePrice.Value > 0)
+                        {
+                            <div class="zen-price-tier zen-price-tier--best">
+                                <span class="zen-tier-qty">Sale Price</span>
+                                <span class="zen-tier-price text-danger fw-bold">@Model.Product.SalePrice.Value.ToString("N2") EGP</span>
+                            </div>
+                            <div class="zen-price-tier">
+                                <span class="zen-tier-qty">Regular Price</span>
+                                <span class="zen-tier-price text-decoration-line-through">@Model.Product.Price.ToString("N2") EGP</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="zen-price-tier zen-price-tier--best">
+                                <span class="zen-tier-qty">Your Price</span>
+                                <span class="zen-tier-price">@Model.Product.Price.ToString("N2") EGP</span>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-3">
+                        <span class="badge bg-danger" style="font-size: 1.2rem; padding: 0.75rem 2rem;">UNAVAILABLE</span>
+                    </div>
+                }
+            </div>
+
+            <div class="zen-product-description">
+                @Html.Raw(Model.Product.Description)
+            </div>
+
+            @if (!Model.Product.IsOutOfStock)
+            {
+                <div class="zen-product-actions">
+                    <div class="zen-quantity-selector">
+                        <label class="zen-quantity-label">Quantity</label>
+                        <input asp-for="Count" type="number" value="1" min="1" class="zen-quantity-input" />
+                    </div>
+                    <button type="submit" class="btn btn-primary zen-btn zen-add-to-cart">
+                        <i class="bi bi-cart-plus"></i>
+                        <span>Add to Cart</span>
+                    </button>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning" role="alert">
+                    <i class="bi bi-info-circle-fill"></i>
+                    This product cannot be added to cart as it is currently out of stock.
+                </div>
+            }
+        </div>
+    </div>
+</form>
+
+<script>
+function zenSwitchImage(url) {
+    const mainImg = document.getElementById('zenMainImage');
+    mainImg.style.opacity = '0';
+    setTimeout(() => {
+        mainImg.src = url;
+        mainImg.style.opacity = '1';
+    }, 200);
+}
+</script>

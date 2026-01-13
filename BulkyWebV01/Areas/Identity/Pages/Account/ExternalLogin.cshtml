@@ -1,0 +1,185 @@
+﻿@page
+@model ExternalLoginModel
+@{
+    ViewData["Title"] = "Complete Registration";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h4 class="mb-0"><i class="bi bi-google me-2"></i>Complete Your Registration</h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="alert alert-success mb-4">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        You've successfully authenticated with <strong>@Model.ProviderDisplayName</strong>.
+                        Please complete your profile to finish registration.
+                    </div>
+
+                    <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post" id="externalLoginForm">
+                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                        
+                        <h5 class="mb-3 text-muted"><i class="bi bi-person-fill me-2"></i>Personal Information</h5>
+                        
+                        <div class="form-floating mb-3">
+                            <input asp-for="Input.Email" class="form-control" autocomplete="email" placeholder="Email" required />
+                            <label asp-for="Input.Email"><i class="bi bi-envelope me-1"></i> Email Address *</label>
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input asp-for="Input.Name" class="form-control" autocomplete="name" placeholder="Full Name" required />
+                            <label asp-for="Input.Name"><i class="bi bi-person me-1"></i> Full Name *</label>
+                            <span asp-validation-for="Input.Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label"><i class="bi bi-telephone me-1"></i> Phone Number (Egypt Only) *</label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="background: #f8f9fa;">
+                                    <img src="https://flagcdn.com/w40/eg.png" width="24" height="16" alt="Egypt" class="me-1">
+                                    +20
+                                </span>
+                                <input asp-for="Input.PhoneNumber" type="tel" class="form-control" 
+                                       id="egyptPhone" placeholder="1XXXXXXXXX" 
+                                       pattern="^1[0125][0-9]{8}$" 
+                                       maxlength="10" required />
+                            </div>
+                            <small class="text-muted">Enter 10 digits starting with 10, 11, 12, or 15 (e.g., 1012345678)</small>
+                            <span asp-validation-for="Input.PhoneNumber" class="text-danger d-block"></span>
+                            <div id="phoneError" class="text-danger" style="display:none;">Please enter a valid Egyptian phone number</div>
+                        </div>
+
+                        <hr class="my-4">
+                        <h5 class="mb-3 text-muted"><i class="bi bi-geo-alt-fill me-2"></i>Shipping Address</h5>
+
+                        <div class="form-floating mb-3">
+                            <input asp-for="Input.StreetAddress" class="form-control" placeholder="Street Address" required />
+                            <label asp-for="Input.StreetAddress"><i class="bi bi-house me-1"></i> Street Address *</label>
+                            <span asp-validation-for="Input.StreetAddress" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Input.City" class="form-control" placeholder="City" required />
+                                    <label asp-for="Input.City"><i class="bi bi-building me-1"></i> City *</label>
+                                    <span asp-validation-for="Input.City" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select asp-for="Input.State" class="form-select" required>
+                                        <option value="">Select Governorate</option>
+                                        <option value="Cairo">Cairo</option>
+                                        <option value="Giza">Giza</option>
+                                        <option value="Alexandria">Alexandria</option>
+                                        <option value="Dakahlia">Dakahlia</option>
+                                        <option value="Red Sea">Red Sea</option>
+                                        <option value="Beheira">Beheira</option>
+                                        <option value="Fayoum">Fayoum</option>
+                                        <option value="Gharbiya">Gharbiya</option>
+                                        <option value="Ismailia">Ismailia</option>
+                                        <option value="Menofia">Menofia</option>
+                                        <option value="Minya">Minya</option>
+                                        <option value="Qaliubiya">Qaliubiya</option>
+                                        <option value="New Valley">New Valley</option>
+                                        <option value="Suez">Suez</option>
+                                        <option value="Aswan">Aswan</option>
+                                        <option value="Assiut">Assiut</option>
+                                        <option value="Beni Suef">Beni Suef</option>
+                                        <option value="Port Said">Port Said</option>
+                                        <option value="Damietta">Damietta</option>
+                                        <option value="Sharkia">Sharkia</option>
+                                        <option value="South Sinai">South Sinai</option>
+                                        <option value="Kafr El Sheikh">Kafr El Sheikh</option>
+                                        <option value="Matrouh">Matrouh</option>
+                                        <option value="Luxor">Luxor</option>
+                                        <option value="Qena">Qena</option>
+                                        <option value="North Sinai">North Sinai</option>
+                                        <option value="Sohag">Sohag</option>
+                                    </select>
+                                    <label asp-for="Input.State"><i class="bi bi-map me-1"></i> Governorate *</label>
+                                    <span asp-validation-for="Input.State" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            <input asp-for="Input.PostalCode" class="form-control" placeholder="Postal Code" pattern="[0-9]{5}" maxlength="5" required />
+                            <label asp-for="Input.PostalCode"><i class="bi bi-mailbox me-1"></i> Postal Code *</label>
+                            <span asp-validation-for="Input.PostalCode" class="text-danger"></span>
+                        </div>
+
+                        <div class="alert alert-info mb-3">
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                            <strong>Delivery:</strong> Orders are delivered within 5-7 business days across Egypt.
+                        </div>
+
+                        <button type="submit" class="w-100 btn btn-lg btn-primary" id="registerBtn">
+                            <i class="bi bi-check-circle me-2"></i>Complete Registration
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const phoneInput = document.getElementById('egyptPhone');
+            const phoneError = document.getElementById('phoneError');
+            const form = document.getElementById('externalLoginForm');
+            
+            // Egyptian phone number validation
+            phoneInput.addEventListener('input', function(e) {
+                // Remove any non-digit characters
+                let value = this.value.replace(/\D/g, '');
+                
+                // Limit to 10 digits
+                if (value.length > 10) {
+                    value = value.substring(0, 10);
+                }
+                
+                this.value = value;
+                
+                // Validate Egyptian mobile pattern: 10, 11, 12, or 15 followed by 8 digits
+                const egyptPattern = /^1[0125][0-9]{8}$/;
+                
+                if (value.length === 10) {
+                    if (egyptPattern.test(value)) {
+                        phoneError.style.display = 'none';
+                        this.classList.remove('is-invalid');
+                        this.classList.add('is-valid');
+                    } else {
+                        phoneError.style.display = 'block';
+                        this.classList.remove('is-valid');
+                        this.classList.add('is-invalid');
+                    }
+                } else if (value.length > 0) {
+                    phoneError.style.display = 'none';
+                    this.classList.remove('is-valid', 'is-invalid');
+                }
+            });
+            
+            // Form validation before submit
+            form.addEventListener('submit', function(e) {
+                const phoneValue = phoneInput.value.replace(/\D/g, '');
+                const egyptPattern = /^1[0125][0-9]{8}$/;
+                
+                if (!egyptPattern.test(phoneValue)) {
+                    e.preventDefault();
+                    phoneError.style.display = 'block';
+                    phoneInput.classList.add('is-invalid');
+                    phoneInput.focus();
+                    return false;
+                }
+            });
+        });
+    </script>
+}

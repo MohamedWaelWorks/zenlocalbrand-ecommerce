@@ -1,0 +1,163 @@
+﻿@model IEnumerable<Product>
+
+<section class="zen-hero zen-animate-fade">
+    <div class="zen-hero__content">
+        <p class="zen-kicker">ZEN / Commerce</p>
+        <h1 class="zen-hero__title">Frictionless shopping, crafted for 2026.</h1>
+        <p class="zen-hero__subtitle">Welcome to ZEN Commerce - Your premier destination for quality products at unbeatable prices. We offer a curated selection of items with fast delivery across Egypt. Shop with confidence knowing you're getting authentic products backed by our quality guarantee.</p>
+        <div class="zen-cta-group">
+            <a class="btn btn-primary zen-btn" asp-area="Customer" asp-controller="Home" asp-action="Index">Explore catalog</a>
+            <a class="btn btn-outline-primary zen-btn" asp-area="Customer" asp-controller="Cart" asp-action="Index">View cart</a>
+        </div>
+        <div class="zen-badges">
+            <span class="zen-chip">1-Click pay-ready</span>
+            <span class="zen-chip">Adaptive layouts</span>
+            <span class="zen-chip">Live in seconds</span>
+        </div>
+    </div>
+    <div class="zen-hero__visual zen-animate-float">
+        <div class="zen-orb zen-orb--primary"></div>
+        <div class="zen-orb zen-orb--accent"></div>
+        <div class="zen-card-mock">
+            <p class="zen-card-mock__eyebrow">Live storefront</p>
+            <h3 class="zen-card-mock__title">ZEN Pulse</h3>
+            <div class="zen-card-mock__bars">
+                <span></span><span></span><span></span><span></span>
+            </div>
+            <p class="zen-card-mock__cta">Powered by Paymob · <strong>Secure</strong></p>
+        </div>
+    </div>
+</section>
+
+<section class="zen-section zen-animate-rise">
+    <div class="zen-section__header">
+        <div>
+            <p class="zen-kicker">Why ZEN</p>
+            <h2>Elegant, immersive shopping for every device.</h2>
+        </div>
+        <div class="zen-section__actions">
+            <span class="zen-chip">New</span>
+            <span class="zen-chip">Fluid motion</span>
+        </div>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="zen-feature-card">
+                <div class="zen-feature-icon"><i class="bi bi-magic"></i></div>
+                <h5>Animated journeys</h5>
+                <p>Soft gradients, subtle parallax, and smooth reveal states make browsing feel premium.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="zen-feature-card">
+                <div class="zen-feature-icon"><i class="bi bi-speedometer2"></i></div>
+                <h5>Performance-first</h5>
+                <p>Lean components, CDN assets, and optimized grids keep pages responsive.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="zen-feature-card">
+                <div class="zen-feature-icon"><i class="bi bi-shield-lock"></i></div>
+                <h5>Trusted checkout</h5>
+                <p>Integrated with Paymob for reliable, secure payments with a modern iframe flow.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Information Section -->
+<section class="zen-section bg-dark py-4 zen-animate-rise">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-4 text-center">
+                <i class="bi bi-telephone-fill text-primary" style="font-size: 2rem;"></i>
+                <p class="mb-0 mt-2"><strong>Call Us:</strong></p>
+                <p class="text-muted">+20 106 213 7061</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <i class="bi bi-envelope-fill text-primary" style="font-size: 2rem;"></i>
+                <p class="mb-0 mt-2"><strong>Email:</strong></p>
+                <p class="text-muted">support@zenlocalbrand.shop</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <i class="bi bi-clock-fill text-primary" style="font-size: 2rem;"></i>
+                <p class="mb-0 mt-2"><strong>Delivery Time:</strong></p>
+                <p class="text-muted">5-7 Business Days</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="zen-section zen-animate-rise">
+    <div class="zen-section__header">
+        <div>
+            <p class="zen-kicker">Catalog</p>
+            <h2>Featured products</h2>
+            <p class="zen-muted">Curated picks refreshed for the ZEN experience. All prices in Egyptian Pounds (EGP).</p>
+        </div>
+    </div>
+    <div class="row pb-3 g-4">
+        @foreach(var product in Model)
+        {
+            <div class="col-lg-3 col-sm-6">
+                <div class="zen-product-card zen-animate-fade">
+                    <div class="zen-product-media">
+                        @if(product.ProductImages!=null && product.ProductImages.Count() > 0)
+                        {
+                            <img src="@product.ProductImages.FirstOrDefault().ImageUrl" 
+                                 class="zen-product-img" 
+                                 alt="@product.Title"
+                                 loading="lazy" />
+                        }
+                        else
+                        {
+                            <img src="https://placehold.co/500x600/png" 
+                                 class="zen-product-img" 
+                                 alt="@product.Title placeholder"
+                                 loading="lazy" />
+                        }
+                    </div>
+
+                    <div class="zen-product-body">
+                        <p class="zen-product-title">@product.Title</p>
+                        <p class="zen-product-meta">By <strong>@product.Author</strong></p>
+                        
+                        @if (!string.IsNullOrEmpty(product.AvailableSizes))
+                        {
+                            <div class="mb-2">
+                                <small class="text-muted">Sizes: </small>
+                                @foreach (var size in product.AvailableSizes.Split(','))
+                                {
+                                    <span class="badge bg-secondary me-1">@size</span>
+                                }
+                            </div>
+                        }
+
+                        <div class="zen-price-stack">
+                            @if (product.IsOutOfStock)
+                            {
+                                <span class="badge bg-danger w-100 py-2">OUT OF STOCK</span>
+                            }
+                            else if (product.SalePrice.HasValue && product.SalePrice.Value > 0)
+                            {
+                                <span class="zen-price-old">@product.Price.ToString("N2") EGP</span>
+                                <span class="zen-price-new">@product.SalePrice.Value.ToString("N2") EGP</span>
+                                <span class="badge bg-danger ms-2">SALE</span>
+                            }
+                            else
+                            {
+                                <span class="zen-price-old">@product.ListPrice.ToString("N2") EGP</span>
+                                <span class="zen-price-new">@product.Price.ToString("N2") EGP</span>
+                            }
+                        </div>
+                        <a asp-action="Details"
+                           asp-route-productId="@product.Id"
+                           class="btn btn-primary zen-btn w-100 @(product.IsOutOfStock ? "disabled" : "")">
+                            @(product.IsOutOfStock ? "Unavailable" : "View details")
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>

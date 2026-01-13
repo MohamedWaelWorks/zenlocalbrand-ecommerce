@@ -1,0 +1,199 @@
+﻿@model Company
+
+<div class="card shadow border-0 my-4">
+    <div class="card-header bg-secondary bg-gradient mt-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-blue py-2"> @(Model.Id != 0 ? "Update" : "Create")Company</h2>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <form method="post" class="row" enctype="multipart/form-data" >
+            <input asp-for="Id" hidden />
+            
+            <div class="row">
+                <div class="col-12">
+                    <div class="border p-3">
+
+                        <div class="form-floating py-2 col-12">
+
+                            <input asp-for="Name" class="form-control border-0 shadow" />
+                            <label asp-for="Name" class="ms-2"></label>
+
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="form-floating py-2 col-12">
+
+                            <input asp-for="PhoneNumber" class="form-control border-0 shadow" />
+                            <label asp-for="PhoneNumber" class="ms-2"></label>
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+
+                            <input asp-for="StreetAddress" class="form-control border-0 shadow" />
+                            <label asp-for="StreetAddress" class="ms-2"></label>
+                            <span asp-validation-for="StreetAddress" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+
+                            <input asp-for="City" class="form-control border-0 shadow" />
+                            <label asp-for="City" class="ms-2"></label>
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+
+                            <input asp-for="State" class="form-control border-0 shadow" />
+                            <label asp-for="State" class="ms-2"></label>
+                            <span asp-validation-for="State" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-floating py-2 col-12">
+
+                            <input asp-for="PostalCode" class="form-control border-0 shadow" />
+                            <label asp-for="PostalCode" class="ms-2"></label>
+                            <span asp-validation-for="PostalCode" class="text-danger"></span>
+                        </div>
+
+  
+
+
+                        <div class="row pt-2">
+                            <div class="col-6 col-md-3">
+
+                                @if (Model.Id != 0)
+                                {
+                                    <button type="submit" class="btn btn-primary form-control">Update </button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-primary form-control"> Create</button>
+                                }
+
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <a asp-controller="Company" asp-action="Index" class="btn btn-outline-primary border form-control">
+                                    Back To List
+                                </a>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+            
+        @section Scripts
+
+        {
+    <style>
+        .custom-editor-toolbar {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-bottom: none;
+            padding: 8px;
+            border-radius: 4px 4px 0 0;
+        }
+        .custom-editor-toolbar button {
+            background: white;
+            border: 1px solid #dee2e6;
+            padding: 6px 12px;
+            margin-right: 4px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .custom-editor-toolbar button:hover {
+            background: #e9ecef;
+        }
+        .custom-editor-content {
+            min-height: 300px;
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            border-radius: 0 0 4px 4px;
+            background: white;
+            outline: none;
+        }
+        .custom-editor-content:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const textarea = document.querySelector('textarea');
+            if (!textarea) return;
+            
+            textarea.style.display = 'none';
+            
+            const editorWrapper = document.createElement('div');
+            editorWrapper.className = 'custom-editor';
+            
+            const toolbar = document.createElement('div');
+            toolbar.className = 'custom-editor-toolbar';
+            toolbar.innerHTML = `
+                <button type="button" data-command="bold" title="Bold"><b>B</b></button>
+                <button type="button" data-command="italic" title="Italic"><i>I</i></button>
+                <button type="button" data-command="underline" title="Underline"><u>U</u></button>
+                <button type="button" data-command="insertUnorderedList" title="Bullet List">• List</button>
+                <button type="button" data-command="insertOrderedList" title="Numbered List">1. List</button>
+                <button type="button" data-command="createLink" title="Insert Link">🔗 Link</button>
+                <button type="button" data-command="removeFormat" title="Clear Formatting">✖ Clear</button>
+            `;
+            
+            const content = document.createElement('div');
+            content.className = 'custom-editor-content';
+            content.contentEditable = true;
+            content.innerHTML = textarea.value || '';
+            
+            editorWrapper.appendChild(toolbar);
+            editorWrapper.appendChild(content);
+            textarea.parentNode.insertBefore(editorWrapper, textarea);
+            
+            toolbar.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const command = this.dataset.command;
+                    
+                    if (command === 'createLink') {
+                        const url = prompt('Enter URL:');
+                        if (url) document.execCommand(command, false, url);
+                    } else {
+                        document.execCommand(command, false, null);
+                    }
+                    content.focus();
+                });
+            });
+            
+            content.addEventListener('input', function() {
+                textarea.value = this.innerHTML;
+            });
+            
+            const form = textarea.closest('form');
+            if (form) {
+                form.addEventListener('submit', function() {
+                    textarea.value = content.innerHTML;
+                });
+            }
+        });
+    </script>
+
+
+           @{
+               <partial name="_ValidationScriptsPartial"/>
+           } 
+
+        }

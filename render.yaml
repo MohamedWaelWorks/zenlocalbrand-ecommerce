@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: zenlocalbrand
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://+:10000
+    disk:
+      name: data
+      mountPath: /app/data
+      sizeGB: 1

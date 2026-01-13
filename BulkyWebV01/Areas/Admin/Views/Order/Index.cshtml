@@ -1,0 +1,77 @@
+﻿@{
+    var status = Context.Request.Query["status"];
+    var pending = "";
+    var inprocess = "";
+    var completed = "";
+    var approved = "";
+    var all = "";
+
+    switch (status)
+    {
+        case "pending":
+            pending = "zen-filter-active";
+            break;
+        case "inprocess":
+            inprocess = "zen-filter-active";
+            break;
+        case "completed":
+            completed = "zen-filter-active";
+            break;
+        case "approved":
+            approved = "zen-filter-active";
+            break;
+        default:
+            all = "zen-filter-active";
+            break;
+    }
+}
+
+<div class="zen-admin-table-wrapper">
+    <div class="zen-admin-table-header">
+        <h2><i class="bi bi-cart3 me-2"></i> Order Management</h2>
+        <div class="zen-admin-table-actions">
+            <div class="zen-search-box">
+                <i class="bi bi-search"></i>
+                <input type="text" id="orderSearch" placeholder="Search orders...">
+            </div>
+        </div>
+    </div>
+
+    <div class="zen-order-filters">
+        <a asp-controller="Order" asp-action="Index" asp-route-status="all" class="zen-filter-btn @all">
+            <i class="bi bi-list-ul"></i> All Orders
+        </a>
+        <a asp-controller="Order" asp-action="Index" asp-route-status="pending" class="zen-filter-btn @pending">
+            <i class="bi bi-clock"></i> Pending
+        </a>
+        <a asp-controller="Order" asp-action="Index" asp-route-status="approved" class="zen-filter-btn @approved">
+            <i class="bi bi-check-circle"></i> Approved
+        </a>
+        <a asp-controller="Order" asp-action="Index" asp-route-status="inprocess" class="zen-filter-btn @inprocess">
+            <i class="bi bi-arrow-repeat"></i> Processing
+        </a>
+        <a asp-controller="Order" asp-action="Index" asp-route-status="completed" class="zen-filter-btn @completed">
+            <i class="bi bi-check2-all"></i> Completed
+        </a>
+    </div>
+
+    <div class="p-4">
+        <table id="tblData" class="table" width="100%">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Total</th>
+                    <th style="width: 100px;">Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/order.js"> </script>
+}

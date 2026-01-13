@@ -1,0 +1,97 @@
+﻿@model ShoppingCartVM
+
+<form method="post" class="zen-cart zen-animate-fade">
+    <div class="zen-cart__header">
+        <div>
+            <h1 class="zen-page-title">Shopping Cart</h1>
+            <p class="zen-muted">Review your items before checkout</p>
+        </div>
+        <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-outline-primary zen-btn">
+            <i class="bi bi-arrow-left"></i> Continue shopping
+        </a>
+    </div>
+
+    <div class="zen-cart__container">
+        <div class="zen-cart__items">
+            @if (Model.ShoppingCartList != null && Model.ShoppingCartList.Any())
+            {
+                @foreach(var item in Model.ShoppingCartList)
+                {
+                    <div class="zen-cart-item zen-animate-rise">
+                        <div class="zen-cart-item__image">
+                            @if (item.Product.ProductImages != null && item.Product.ProductImages.Any())
+                            {
+                                <img src="@item.Product.ProductImages.FirstOrDefault().ImageUrl" alt="@item.Product.Title" />
+                            }
+                            else
+                            {
+                                <img src="https://placehold.co/200x260/1a1f2e/6ee3ff?text=ZEN" alt="Placeholder" />
+                            }
+                        </div>
+                        <div class="zen-cart-item__details">
+                            <h4 class="zen-cart-item__title">@item.Product.Title</h4>
+                            <p class="zen-cart-item__desc">@Html.Raw(item.Product.Description?.Length > 120 ? item.Product.Description.Substring(0, 120) + "..." : item.Product.Description)</p>
+                            <span class="zen-cart-item__price">@item.Price.ToString("N2") EGP each</span>
+                        </div>
+                        <div class="zen-cart-item__actions">
+                            <div class="zen-cart-item__quantity">
+                                <a asp-action="minus" asp-route-cartId="@item.Id" class="zen-qty-btn">
+                                    <i class="bi bi-dash"></i>
+                                </a>
+                                <span class="zen-qty-display">@item.Count</span>
+                                <a asp-action="plus" asp-route-cartId="@item.Id" class="zen-qty-btn">
+                                    <i class="bi bi-plus"></i>
+                                </a>
+                            </div>
+                            <div class="zen-cart-item__total">
+                                @((item.Price * item.Count).ToString("N2")) EGP
+                            </div>
+                            <a asp-action="remove" asp-route-cartId="@item.Id" class="zen-cart-item__remove" title="Remove item">
+                                <i class="bi bi-trash3"></i>
+                            </a>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="zen-empty-cart">
+                    <i class="bi bi-cart-x"></i>
+                    <h3>Your cart is empty</h3>
+                    <p>Add some products to get started.</p>
+                    <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-primary zen-btn">Browse catalog</a>
+                </div>
+            }
+        </div>
+
+        @if (Model.ShoppingCartList != null && Model.ShoppingCartList.Any())
+        {
+            <div class="zen-cart__summary">
+                <div class="zen-summary-card">
+                    <h3 class="zen-summary-title">Order Summary</h3>
+                    <div class="zen-summary-line">
+                        <span>Subtotal</span>
+                        <span>@Model.OrderHeader.OrderTotal.ToString("N2") EGP</span>
+                    </div>
+                    <div class="zen-summary-line">
+                        <span>Shipping</span>
+                        <span class="zen-accent">Free</span>
+                    </div>
+                    <div class="zen-summary-divider"></div>
+                    <div class="zen-summary-total">
+                        <span>Total</span>
+                        <span>@Model.OrderHeader.OrderTotal.ToString("N2") EGP</span>
+                    </div>
+                    <a asp-action="Summary" class="btn btn-primary zen-btn w-100 zen-checkout-btn">
+                        <span>Proceed to Checkout</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                    <div class="zen-trust-badges">
+                        <span class="zen-trust-badge"><i class="bi bi-shield-check"></i> Secure checkout</span>
+                        <span class="zen-trust-badge"><i class="bi bi-truck"></i> Free shipping</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</form>

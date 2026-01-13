@@ -1,0 +1,36 @@
+﻿@model List<Product>
+
+<div class="zen-admin-table-wrapper">
+    <div class="zen-admin-table-header">
+        <h2><i class="bi bi-box-seam me-2"></i> Product Management</h2>
+        <div class="zen-admin-table-actions">
+            <div class="zen-search-box">
+                <i class="bi bi-search"></i>
+                <input type="text" id="productSearch" placeholder="Search products...">
+            </div>
+            <a asp-controller="Product" asp-action="Upsert" class="btn btn-primary zen-btn-sm">
+                <i class="bi bi-plus-circle"></i> New Product
+            </a>
+        </div>
+    </div>
+    <div class="p-4">
+        <partial name="_Notification" />
+
+        <table id="tblData" class="table" width="100%">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>ISBN</th>
+                    <th>Price</th>
+                    <th>Author</th>
+                    <th>Category</th>
+                    <th style="width: 120px;">Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/product.js"> </script>
+}

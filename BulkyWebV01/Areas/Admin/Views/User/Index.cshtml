@@ -1,0 +1,31 @@
+﻿<div class="zen-admin-table-wrapper">
+    <div class="zen-admin-table-header">
+        <h2><i class="bi bi-people me-2"></i> User Management</h2>
+        <div class="zen-admin-table-actions">
+            <div class="zen-search-box">
+                <i class="bi bi-search"></i>
+                <input type="text" id="userSearch" placeholder="Search users...">
+            </div>
+        </div>
+    </div>
+    <div class="p-4">
+        <partial name="_Notification" />
+
+        <table id="tblData" class="table" width="100%">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Company</th>
+                    <th>Role</th>
+                    <th style="width: 120px;">Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/user.js"> </script>
+}

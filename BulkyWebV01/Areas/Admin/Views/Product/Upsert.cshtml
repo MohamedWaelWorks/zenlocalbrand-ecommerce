@@ -1,0 +1,343 @@
+﻿@model ProductVM
+
+<div class="card shadow border-0 my-4">
+    <div class="card-header bg-secondary bg-gradient mt-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-blue py-2"> @(Model.Product.Id!=0?"Update":"Create")Product</h2>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <form method="post" class="row" enctype="multipart/form-data" >
+            <input asp-for="Product.Id" hidden />
+@*             <input asp-for="Product.ImageUrl" hidden /> *@
+            <div class="row">
+                <div class="col-10">
+                    <div class="border p-3">
+
+                        <div class="form-floating py-2 col-12">
+
+                            <input asp-for="Product.Title" class="form-control border-0 shadow" />
+                            <label asp-for="Product.Title" class="ms-2"></label>
+
+                            <span asp-validation-for="Product.Title" class="text-danger"></span>
+                        </div>
+                        <div class="py-2 col-12">
+                            <label asp-for="Product.Description" class="ms-2 text-muted"></label>
+                            <textarea asp-for="Product.Description" class="form-control border-0 shadow"></textarea>
+
+
+                        </div>
+
+                        <div class="form-floating py-2 col-12">
+
+                            <input asp-for="Product.ISBN" class="form-control border-0 shadow" />
+                            <label asp-for="Product.ISBN" class="ms-2"></label>
+                            <span asp-validation-for="Product.ISBN" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+
+                            <input asp-for="Product.Author" class="form-control border-0 shadow" />
+                            <label asp-for="Product.Author" class="ms-2"></label>
+                            <span asp-validation-for="Product.Author" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+
+                            <input asp-for="Product.ListPrice" class="form-control border-0 shadow product-price-field" />
+                            <label asp-for="Product.ListPrice" class="ms-2"></label>
+                            <span asp-validation-for="Product.ListPrice" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+
+                            <input asp-for="Product.Price" class="form-control border-0 shadow product-price-field" />
+                            <label asp-for="Product.Price" class="ms-2"></label>
+                            <span asp-validation-for="Product.Price" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-floating py-2 col-12">
+
+                            <input asp-for="Product.SalePrice" class="form-control border-0 shadow product-price-field" placeholder="Optional - leave empty if no sale" />
+                            <label asp-for="Product.SalePrice" class="ms-2"></label>
+                            <span asp-validation-for="Product.SalePrice" class="text-danger"></span>
+                            <small class="text-muted ms-2">Optional - If set, this price will be used instead of the regular price</small>
+                        </div>
+
+                        <div class="py-2 col-12">
+                            <div class="form-check form-switch">
+                                <input asp-for="Product.IsOutOfStock" class="form-check-input" type="checkbox" id="outOfStockSwitch" />
+                                <label asp-for="Product.IsOutOfStock" class="form-check-label ms-2" for="outOfStockSwitch">
+                                    Mark as Out of Stock
+                                </label>
+                            </div>
+                            <small class="text-muted ms-2">When checked, price fields will be disabled and product will be marked as unavailable</small>
+                        </div>
+
+                        <div class="py-2 col-12">
+                            <label class="ms-2 text-muted">Available Sizes</label>
+                            <div class="d-flex gap-3 mt-2 ms-2">
+                                <div class="form-check">
+                                    <input class="form-check-input size-checkbox" type="checkbox" value="S" id="sizeS" />
+                                    <label class="form-check-label" for="sizeS">S</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input size-checkbox" type="checkbox" value="M" id="sizeM" />
+                                    <label class="form-check-label" for="sizeM">M</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input size-checkbox" type="checkbox" value="L" id="sizeL" />
+                                    <label class="form-check-label" for="sizeL">L</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input size-checkbox" type="checkbox" value="XL" id="sizeXL" />
+                                    <label class="form-check-label" for="sizeXL">XL</label>
+                                </div>
+                            </div>
+                            <input type="hidden" asp-for="Product.AvailableSizes" id="availableSizesInput" />
+                            <small class="text-muted ms-2">Select available sizes for this product</small>
+                        </div>
+
+                        <div class="form-floating py-2 col-12">
+
+                            <select asp-for="Product.CategoryId" asp-items="@Model.CategoryList" class="form-select border-0 shadow">
+                                <option disabled selected>--Select Category--</option>
+
+                            </select>
+                            <label asp-for="Product.CategoryId" class="ms-2"></label>
+                            <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-floating py-2 col-12">
+
+                            <input type="file" name="files" class="form-control border-0 shadow" multiple />
+                             <label asp-for="Product.ProductImages" class="ms-2"></label> 
+
+                        </div>
+
+
+                        <div class="row pt-2">
+                            <div class="col-6 col-md-3">
+
+                                @if (Model.Product.Id != 0)
+                                {
+                                    <button type="submit" class="btn btn-primary form-control">Update </button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-primary form-control"> Create</button>
+                                }
+
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <a asp-controller="Product" asp-action="Index" class="btn btn-outline-primary border form-control">
+                                    Back To List
+                                </a>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <div class="col-2">
+
+                    @if (Model.Product.ProductImages != null)
+                    {
+                        foreach(var image in Model.Product.ProductImages)
+                        {
+                            <div class="border p-1 m-2 text-center">
+                                <img src="@image.ImageUrl" width="100%"
+                                     style="border-radius:5px; border:1px solid #bbb9b9" />
+
+                                     <a asp-action="DeleteImage" class="btn btn-danger" asp-route-imageId="@image.Id">
+                                         <i class="bi bi-trash-fill"></i>Delete
+                                     </a>
+
+                                </div>
+                        }
+                    }
+
+             
+
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+            
+        @section Scripts
+
+        {
+    <style>
+        .custom-editor-toolbar {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-bottom: none;
+            padding: 8px;
+            border-radius: 4px 4px 0 0;
+        }
+        .custom-editor-toolbar button {
+            background: white;
+            border: 1px solid #dee2e6;
+            padding: 6px 12px;
+            margin-right: 4px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .custom-editor-toolbar button:hover {
+            background: #e9ecef;
+        }
+        .custom-editor-toolbar button.active {
+            background: #0d6efd;
+            color: white;
+        }
+        .custom-editor-content {
+            min-height: 300px;
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            border-radius: 0 0 4px 4px;
+            background: white;
+            outline: none;
+        }
+        .custom-editor-content:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const textarea = document.querySelector('textarea[name="Product.Description"]');
+            if (!textarea) return;
+            
+            // Hide original textarea
+            textarea.style.display = 'none';
+            
+            // Create custom editor
+            const editorWrapper = document.createElement('div');
+            editorWrapper.className = 'custom-editor';
+            
+            const toolbar = document.createElement('div');
+            toolbar.className = 'custom-editor-toolbar';
+            toolbar.innerHTML = `
+                <button type="button" data-command="bold" title="Bold"><b>B</b></button>
+                <button type="button" data-command="italic" title="Italic"><i>I</i></button>
+                <button type="button" data-command="underline" title="Underline"><u>U</u></button>
+                <button type="button" data-command="insertUnorderedList" title="Bullet List">• List</button>
+                <button type="button" data-command="insertOrderedList" title="Numbered List">1. List</button>
+                <button type="button" data-command="createLink" title="Insert Link">🔗 Link</button>
+                <button type="button" data-command="removeFormat" title="Clear Formatting">✖ Clear</button>
+            `;
+            
+            const content = document.createElement('div');
+            content.className = 'custom-editor-content';
+            content.contentEditable = true;
+            content.innerHTML = textarea.value || '';
+            
+            editorWrapper.appendChild(toolbar);
+            editorWrapper.appendChild(content);
+            textarea.parentNode.insertBefore(editorWrapper, textarea);
+            
+            // Toolbar button handlers
+            toolbar.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const command = this.dataset.command;
+                    
+                    if (command === 'createLink') {
+                        const url = prompt('Enter URL:');
+                        if (url) document.execCommand(command, false, url);
+                    } else {
+                        document.execCommand(command, false, null);
+                    }
+                    content.focus();
+                });
+            });
+            
+            // Sync content to textarea on change
+            content.addEventListener('input', function() {
+                textarea.value = this.innerHTML;
+            });
+            
+            // Sync on form submit
+            const form = textarea.closest('form');
+            if (form) {
+                form.addEventListener('submit', function() {
+                    textarea.value = content.innerHTML;
+                });
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const outOfStockCheckbox = document.getElementById('outOfStockSwitch');
+            const priceFields = document.querySelectorAll('.product-price-field');
+            const sizeCheckboxes = document.querySelectorAll('.size-checkbox');
+            const sizesInput = document.getElementById('availableSizesInput');
+
+            // Function to toggle price fields
+            function togglePriceFields() {
+                const isOutOfStock = outOfStockCheckbox.checked;
+                priceFields.forEach(field => {
+                    field.disabled = isOutOfStock;
+                    if (isOutOfStock) {
+                        field.classList.add('bg-light');
+                        field.value = '0';
+                    } else {
+                        field.classList.remove('bg-light');
+                    }
+                });
+            }
+
+            // Function to update sizes hidden input
+            function updateSizes() {
+                const selectedSizes = Array.from(sizeCheckboxes)
+                    .filter(cb => cb.checked)
+                    .map(cb => cb.value);
+                sizesInput.value = selectedSizes.join(',');
+            }
+
+            // Initialize on page load
+            if (outOfStockCheckbox.checked) {
+                togglePriceFields();
+            }
+
+            // Load existing sizes if editing
+            if (sizesInput.value) {
+                const existingSizes = sizesInput.value.split(',');
+                sizeCheckboxes.forEach(cb => {
+                    if (existingSizes.includes(cb.value)) {
+                        cb.checked = true;
+                    }
+                });
+            }
+
+            // Event listeners
+            outOfStockCheckbox.addEventListener('change', togglePriceFields);
+            sizeCheckboxes.forEach(cb => {
+                cb.addEventListener('change', updateSizes);
+            });
+
+            // Update sizes before form submit
+            const form = outOfStockCheckbox.closest('form');
+            if (form) {
+                form.addEventListener('submit', function() {
+                    updateSizes();
+                });
+            }
+        });
+    </script>
+
+
+           @{
+               <partial name="_ValidationScriptsPartial"/>
+           } 
+
+        }

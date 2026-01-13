@@ -1,0 +1,153 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ZEN Commerce</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/BulkyWebV01.styles.css" asp-append-version="true" />
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+
+</head>
+<body class="zen-body">
+    <div class="zen-page-wrapper">   
+        <header class="zen-header">
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3 zen-nav">
+            <div class="container-fluid zen-nav__inner">
+                <a class="navbar-brand zen-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <span class="zen-brand__dot"></span>
+                    <span class="zen-brand__text">ZEN</span>
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between zen-nav__links">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link zen-link" asp-area="Customer" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        
+                        @if (User.IsInRole(SD.Role_Admin))
+                        { 
+                            <li class="nav-item">
+                                <a class="nav-link zen-link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                                    <i class="bi bi-speedometer2"></i> Dashboard
+                                </a>
+                            </li>
+                        }
+                        
+                        <li class="nav-item">
+                            <a class="nav-link zen-link" asp-area="Admin" asp-controller="Order" asp-action="Index">Orders</a>
+                        </li>
+                     
+                       
+                        @if (User.IsInRole(SD.Role_Admin))
+                        { 
+
+
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Content
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">Category</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Index">Product</a>
+                                    </li>
+
+
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Company" asp-action="Index">Company</a>
+                                    </li>
+
+                                    <li><hr class="dropdown-divider"></li>
+
+
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Create-User</a>
+                                    </li>
+
+
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="Index">User - Manage</a>
+                                    </li>
+
+
+                                </ul>
+                            </li>
+                        } 
+
+                       
+                            <li class="nav-item">
+                                <a class="nav-link zen-link" asp-area="Customer" asp-controller="Cart" asp-action="Index">
+
+                                    @await Component.InvokeAsync("ShoppingCart")
+                                </a>
+                            </li>
+                        
+
+                    </ul>
+
+                    <partial name ="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    @if (User.Identity.IsAuthenticated)
+    {
+        @inject Microsoft.AspNetCore.Identity.UserManager<Microsoft.AspNetCore.Identity.IdentityUser> UserManager
+        
+        var currentUser = await UserManager.GetUserAsync(User) as Bulky.Models.ApplicationUser;
+        if (currentUser != null)
+        {
+            if (string.IsNullOrEmpty(currentUser.SecretCode))
+            {
+                <div class="alert alert-warning alert-dismissible fade show m-0" role="alert">
+                    <div class="container">
+                        <strong><i class="bi bi-exclamation-triangle-fill"></i> Action Required!</strong> 
+                        For your account security, please set up your secret recovery code. 
+                        <a href="/Identity/Account/Manage/SetSecretCode" class="alert-link">Set it now</a>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            }
+        }
+    }
+    
+    <div class="container zen-shell zen-main-content">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js" asp-append-version="true"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    
+    </script>
+    
+    
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

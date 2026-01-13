@@ -1,0 +1,53 @@
+﻿@model List<Category>
+
+<div class="zen-admin-table-wrapper">
+    <div class="zen-admin-table-header">
+        <h2><i class="bi bi-folder me-2"></i> Category Management</h2>
+        <div class="zen-admin-table-actions">
+            <a asp-controller="Category" asp-action="Create" class="btn btn-primary zen-btn-sm">
+                <i class="bi bi-plus-circle"></i> New Category
+            </a>
+        </div>
+    </div>
+    <div class="p-4">
+        <partial name="_Notification" />
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width: 50%;">Category Name</th>
+                    <th style="width: 30%;">Display Order</th>
+                    <th style="width: 20%;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var obj in Model.OrderBy(u => u.DisplayOrder))
+                {
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="zen-category-icon">
+                                    <i class="bi bi-folder-fill"></i>
+                                </div>
+                                <span class="fw-bold">@obj.Name</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="zen-badge zen-badge--pending">Order: @obj.DisplayOrder</span>
+                        </td>
+                        <td>
+                            <div class="zen-table-actions">
+                                <a asp-controller="Category" asp-action="Edit" asp-route-id="@obj.Id" class="zen-icon-btn" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a asp-controller="Category" asp-action="Delete" asp-route-id="@obj.Id" class="zen-icon-btn zen-icon-btn--danger" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
